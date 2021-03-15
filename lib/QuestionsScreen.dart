@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:biography1/answer.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +17,7 @@ class QuestionsScreen extends StatefulWidget {
 }
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
+  bool _loading=false;
    File _answerImg;
   final Color logoGreen = Color(0xff25bcbb);
   bool disabler = false;
@@ -39,6 +39,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
     QuestionsCollection questionsCollection=QuestionsCollection();
     var data= questionsCollection.getdataList(widget.id);
     QuestionsHub.questionsofHub=questionsCollection.getdataList(widget.id);
+
   }
   var _image;
   final picker = ImagePicker();
@@ -105,7 +106,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
+        child:_loading?CircularProgressIndicator(): Scaffold(
             resizeToAvoidBottomInset: false,
           appBar: AppBar(
             backgroundColor: Color(0xff25bcbb),
@@ -129,7 +130,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                     children: [
 
                     ElevatedButton(onPressed:(){
-                      Navigator.popAndPushNamed(context,'/b');
+                      // Navigator.popAndPushNamed(context,'/b');
+
 
                     },
                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>( logoGreen)),
@@ -201,21 +203,22 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                       ) ),
                   ElevatedButton(
                       onPressed: () {
-                        // if(_answerImg==null){
-                          Provider.of<Answers>(context ,listen: false).add(AnswerModel(answer: 'a',ifImg: ));
-                        //   //   answer: controller.text,
-                        //   //   ifImg: false,
-                        //   //   img: null,
-                        //   //
-                        //   // ));
-                        // }else{
-                        //   Provider.of<Answers>(context,listen: false).notifyListeners();
-                        //   // Answers.addAnswer(AnswerModel(
-                        //   //   answer: controller.text,
-                        //   //   ifImg: true,
-                        //   //   img: _answerImg,
-                        //   // ));
-                        // }
+                        if(_answerImg==null){
+                          Answers.add( AnswerModel(
+                              answer: controller.text,
+                              ifImg: false,
+                              img: null
+
+                          ));
+
+                        }else{
+                        Answers.add( AnswerModel(
+                              answer: controller.text,
+                              ifImg: true,
+                              img: _answerImg
+
+                          ));
+                        }
                         setState(() {
                           _answerImg=null;
                           controller.text="";

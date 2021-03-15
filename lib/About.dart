@@ -1,3 +1,5 @@
+import 'package:biography1/answer.dart';
+
 import 'QuestionsScreen.dart';
 import 'package:flutter/material.dart';
 import 'Questions.dart';
@@ -63,6 +65,7 @@ class _AboutState extends State<About> {
 
                     ElevatedButton(onPressed:(){
                       print(_character);
+                      Answers.answers=[];
 
 
                       if(_character==SingingCharacter.herself){
@@ -75,6 +78,7 @@ class _AboutState extends State<About> {
                         print("your self is selected");
 
                       }else{
+
                         Navigator.of(context).push(MaterialPageRoute(builder:(ctx)=>QuestionsScreen("himself")));
                         // print(completelist);
                         print("him self is selected");

@@ -3,21 +3,22 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 
 class AnswerModel {
-  final String id;
   final File img;
   final bool ifImg;
   final String answer;
-  AnswerModel({this.img, this.answer, this.ifImg, this.id});
+  AnswerModel({this.img, this.answer, this.ifImg});
 }
 
-class Answers  extends ChangeNotifier{
-  final List<AnswerModel> _answers = [];
+class Answers{
+  static List<AnswerModel> answers = [];
 
 
-      void add(AnswerModel answers) {
-      _answers.add(answers);
+     static void add(AnswerModel answer) {
+      answers.add(answer);
 
-      notifyListeners();
+    }
+    static Future<void> uploadAnswer(){
+
     }
 
 }

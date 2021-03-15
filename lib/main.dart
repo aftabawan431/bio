@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ChangeNotifierProvider(
-        create: (BuildContext ctx)=>Answers(),
-          child: HomeScreen()),
+      home:
+
+        HomeScreen(),
       routes: {
         '/a':(ctx)=>LoginScreen(),
         '/b':(ctx)=>HomePage(),
