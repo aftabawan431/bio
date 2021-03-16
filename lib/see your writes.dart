@@ -31,7 +31,7 @@ class _SeeYourWritesState extends State<SeeYourWrites> {
         width: double.infinity,
         child: Column(
           children: [
-            Center(child: Text('Previous Biography',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w700),)),
+            Center(child: Text('Your Writes',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w700),)),
           ],
         ),
       ),

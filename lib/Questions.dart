@@ -13,7 +13,7 @@ Questions({ this.questionsList, this.id});
 
 class  QuestionsCollection{
    List<Questions> _dataList=[
-    Questions(id: 'yourself',
+    Questions(id: 'mySelf',
       questionsList: [
     Question(question:'What is your Name?'),
         Question(question:'What is your age?'),
@@ -23,14 +23,14 @@ class  QuestionsCollection{
 
       ],
     ),
-  Questions(id: 'herself',questionsList: [
+  Questions(id: 'herSelf',questionsList: [
     Question(question:'What is her Name?'),
     Question(question:'What is her age?'),
     Question(question:'What is her father name?'),
     Question(question:'What is her current status?'),
     Question(question:'How old is she?')
   ]),
-    Questions(id: 'himself',questionsList: [
+    Questions(id: 'himSelf',questionsList: [
       Question(question:'What is his Name?'),
       Question(question:'What is his age?'),
       Question(question:'What is his father name?'),

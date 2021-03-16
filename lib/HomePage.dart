@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
         width: double.infinity,
         child: Column(
           children: [
-            Center(child: Text('Your Writes',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w700),)),
+            Center(child: Text('Previous Writes',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w700),)),
           ],
         ),
       ),

@@ -1,9 +1,14 @@
 import 'Questions.dart';
 class QuestionsHub{
-static int questionNo =1;
+static int questionNo=0;
 static List<Question> questionsofHub=[
 
 ];
+static void addQuestion(Question question){
+ questionsofHub.add(question);
+
+}
+
  static int getCurrentQuestion(){
   return questionNo;
 }

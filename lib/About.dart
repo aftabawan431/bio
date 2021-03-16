@@ -12,7 +12,7 @@ class About extends StatefulWidget {
 
 class _AboutState extends State<About> {
   SingingCharacter _character = SingingCharacter.yourself;
-
+  TextEditingController _nameController = new TextEditingController();
   final Color primaryColor = Color(0xff18203d);
   final Color secondaryColor = Color(0xff232c51);
 
@@ -53,6 +53,7 @@ class _AboutState extends State<About> {
                     // Gender(),
                     Text(('Enter name'),style: TextStyle(fontSize: 20,fontWeight: FontWeight.w800),),
                 TextField(
+                  controller: _nameController,
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       labelStyle: TextStyle(color: Colors.white),
@@ -69,17 +70,17 @@ class _AboutState extends State<About> {
 
 
                       if(_character==SingingCharacter.herself){
-                       Navigator.of(context).push(MaterialPageRoute(builder:(ctx)=>QuestionsScreen("herself")));
+                       Navigator.of(context).push(MaterialPageRoute(builder:(ctx)=>QuestionsScreen("herSelf",_nameController.text)));
                        // print(completelist);
                         print("her self is selected");
                       }else if(_character==SingingCharacter.yourself){
-                        Navigator.of(context).push(MaterialPageRoute(builder:(ctx)=>QuestionsScreen("yourself")));
+                        Navigator.of(context).push(MaterialPageRoute(builder:(ctx)=>QuestionsScreen("mySelf",_nameController.text)));
                         // print(completelist);
                         print("your self is selected");
 
                       }else{
 
-                        Navigator.of(context).push(MaterialPageRoute(builder:(ctx)=>QuestionsScreen("himself")));
+                        Navigator.of(context).push(MaterialPageRoute(builder:(ctx)=>QuestionsScreen("himSelf",_nameController.text)));
                         // print(completelist);
                         print("him self is selected");
 

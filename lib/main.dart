@@ -7,6 +7,8 @@ import 'HomeScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'DataProvider.dart';
 import 'Login_Screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:biography1/answer.dart';
 
 void main() async {

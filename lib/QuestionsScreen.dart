@@ -1,5 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:biography1/answer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Questions.dart';
@@ -11,13 +14,15 @@ import 'package:provider/provider.dart';
 
 class QuestionsScreen extends StatefulWidget {
   final String id;
-  QuestionsScreen(this.id);
+  final String name;
+  QuestionsScreen(this.id,this.name);
   @override
   _QuestionsScreenState createState() => _QuestionsScreenState();
 }
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
-  bool _loading=false;
+  bool _loading=true;
+  bool _publishLoading=false;
    File _answerImg;
   final Color logoGreen = Color(0xff25bcbb);
   bool disabler = false;
@@ -32,13 +37,39 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
       disabler = false;
     });
   }
+
+
+  setQuestions()async{
+    setState(() {
+      QuestionsHub.questionsofHub=[];
+      QuestionsHub.questionNo=0;
+    });
+
+  final response=await  FirebaseFirestore.instance.collection(widget.id).orderBy("timeStamp").get();
+  for(var i in response.docs){
+    print(i.data());
+
+    QuestionsHub.addQuestion(Question(
+        question:i.data()['question']
+
+    ));
+  }
+  setState(() {
+    _loading=false;
+  });
+
+  }
   @override
   void initState() {
+
+
+
     // TODO: implement initState
     super.initState();
-    QuestionsCollection questionsCollection=QuestionsCollection();
-    var data= questionsCollection.getdataList(widget.id);
-    QuestionsHub.questionsofHub=questionsCollection.getdataList(widget.id);
+   setQuestions();
+    // QuestionsCollection questionsCollection=QuestionsCollection();
+    // var data= questionsCollection.getdataList(widget.id);
+    // QuestionsHub.questionsofHub=questionsCollection.getdataList(widget.id);
 
   }
   var _image;
@@ -62,7 +93,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
         builder: (BuildContext context) {
           TextEditingController _emailControllerField = TextEditingController();
           return CustomAlertDialog(
-            content: Container(
+            content:_loading?SizedBox(child: CircularProgressIndicator(),
+
+            height: 200,width: 200,): Container(
                 width: MediaQuery.of(context).size.width / 1.2,
                 height: MediaQuery.of(context).size.height / 4.0,
                 color: Colors.white,
@@ -86,15 +119,34 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                     SizedBox(
                       height: 10,
                     ),
+                    if(_publishLoading)
+                      CircularProgressIndicator(),
+                    if(!_publishLoading)
                     ElevatedButton(
                       child: Text('publish'),
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>( logoGreen)),
-                        onPressed: (){
-                        Navigator.popAndPushNamed(context,'/b');
-                        setState(() {
-                          QuestionsHub().resetQuestionNo();
-                        });
+                        onPressed: ()
+                          async{
+                            setState(() {
+                              _publishLoading=true;
+                            });
+                            // Navigator.popAndPushNamed(context,'/b');
+
+                            final user=await FirebaseAuth.instance.currentUser;
+                            // await Answers.uploadAnswer();
+                            print("done");
+                            setState(() {
+                              _publishLoading=false;
+                            });
+                     Navigator.popAndPushNamed(context,'/b');
+
+                      setState(() {
+                    QuestionsHub().resetQuestionNo();
+                          });
                       },
+
+
+
 
                     )
                   ],
@@ -128,12 +180,36 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      if(_publishLoading)
+                        CircularProgressIndicator(),
+                      if(!_publishLoading)
+                    ElevatedButton(onPressed:()async{
+            // Navigator.popAndPushNamed(context,'/b');
+                      setState(() {
+                        _publishLoading=true;
+                      });
 
-                    ElevatedButton(onPressed:(){
-                      // Navigator.popAndPushNamed(context,'/b');
+                     final user=await FirebaseAuth.instance.currentUser;
+                     final docId=DateTime.now().millisecondsSinceEpoch.toString();
+                      await  FirebaseFirestore.instance.collection('biographies').doc(docId).set({
+                            "userId":user.uid,
+                            "email":user.email,
+                            "createdAt":DateTime.now(),
+                        "type":widget.id,
+
+                        "name":widget.name,
+                            "answers":[]
 
 
-                    },
+                          });
+                    await Answers.uploadAnswer(docId);
+                        print("done");
+                      setState(() {
+                        _publishLoading=false;
+                      });
+                       },
+
+
                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>( logoGreen)),
 
                         child:Row(
@@ -147,7 +223,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                   SizedBox(height: 10,),
                   Row(
                     children: [
-                      Text('Qno:${QuestionsHub.getCurrentQuestion()}',style: TextStyle(fontSize: 20,color: Colors.white),),
+                      Text('Qno:${QuestionsHub.getCurrentQuestion()+1}',style: TextStyle(fontSize: 20,color: Colors.white),),
                       Text(QuestionsHub.getQuestionsText(),style: TextStyle(fontSize: 20,color: Colors.white),),
                     ],
                   ),
@@ -201,6 +277,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                           Text(" Image"),
                         ],
                       ) ),
+                  if(_publishLoading)
+                    CircularProgressIndicator(),
+                  if(!_publishLoading)
                   ElevatedButton(
                       onPressed: () {
                         if(_answerImg==null){
